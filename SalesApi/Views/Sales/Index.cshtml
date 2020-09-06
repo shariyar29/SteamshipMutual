@@ -1,0 +1,415 @@
+﻿@*@{
+        ViewBag.Title = "Index";
+    }*@
+
+<h2>Sales Report</h2>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="row">
+        <div class="column">
+            <button type="button" class="btn btn-info btn-group-sm " data-toggle="modal" data-target="#NewSalesModal"><i class="fa fa-plus"></i> Sale</button>
+            <div class="container">
+                <h4>Total Sales Employee wise</h4>
+
+                <table class="tblsales table-bordered">
+                    <thead>
+                        <tr style="background-color:forestgreen">
+                            <th>Name</th>
+                            <th>Total Sales</th>
+                            <th>Manager </th>
+                    <tbody></tbody>
+
+
+                </table>
+            </div>
+        </div>
+
+
+        <div class="column">
+            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#NewEmpModal"><i class="fa fa-plus"></i> Employee</button>
+            <div class="container">
+                <h4>All Sales</h4>
+                <table cellspacing="0" cellpadding="0" border="0" width="425">
+                    <tr>
+                        <td>
+                            <table cellspacing="0" cellpadding="1" border="1" width="400">
+                                <tr style="color:white;background-color:forestgreen">
+                                    <th>Name</th>
+                                    <th>Sale Amount</th>
+                                    <th>Manager </th>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            
+                            <div style="width:420px; height:180px; overflow:auto;">
+                                <table cellspacing="0" cellpadding="1" border="1" class="tblallsales table-bordered" width="400"></table>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="modal fade" id="NewEmpModal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">New Employee details</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="exampleFormControlSelect1">First Name</label>
+                                    <input type="text" class="txt_FName form-control" placeholder="First name">
+                                </div>
+                                <div class="col">
+                                    <label for="exampleFormControlSelect1">Last Name</label>
+                                    <input type="text" class="txt_LName form-control" placeholder="Last name">
+                                </div>
+                                <div class="col">
+                                    <label for="exampleFormControlSelect1">Role</label>
+                                    <select class="drp_role form-control form-control-sm">
+                                        <option value="Manager">Manager</option>
+                                        <option value="Sales">Sales</option>
+                                    </select>
+
+                                </div>
+                                <div class="col">
+                                    <label for="exampleFormControlSelect1">Manager Name</label>
+                                    <select class="drp_mng form-control form-control-sm"></select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="btnsubmit"class="btn_submit btn btn-default" data-dismiss="modal">Submit</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+
+    <div>
+        <div class="modal fade" id="NewSalesModal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">New Sales details</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="row">
+                                <label for="exampleFormControlSelect1">Name</label>
+                                <div class="col">
+                                    <select class="drp_name form-control form-control-sm"></select>
+                                </div>
+                                <div class="col">
+                                    <label for="date">Select Date</label>
+                                    <input type="date" class="txt_Date form-control" placeholder="Date">
+                                </div>
+                                <div class="col">
+                                    <label for="Amount">Enter Amount</label>
+                                    <input type="number" class="txt_Amount form-control" placeholder="Amount">
+                                </div>
+                                <div class="col">
+                                    <label for="SaleDescription">Sale Description </label>
+                                    <input type="text" class="txt_Desc form-control" placeholder="Description">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="btnsubmit"class="btn_Salessubmit btn btn-default" data-dismiss="modal">Submit</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        sales();
+        AllSales();
+    })
+</script>
+<script>
+    function sales() {
+
+
+        $(document).ready(function () {
+            $.ajax({
+                type: 'Get',
+                url: "http://localhost:51533/api/sales",
+
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+
+                success: function (data) {
+                    $.each(data, function (index, val) {
+
+                        $(".tblsales").append('<tr><td>' + val.EmployeeName + '</td><td>' + val.TotalSales + '</td><td>' + val.ManagerName + '</td></tr>');
+                        //alert(fullname);
+                    });
+                    console.log(data);
+                },
+                fail: function (jqXHR, textStatus) {
+                    alert("Request failed: " + textStatus);
+                }
+            })
+
+        })
+    }
+</script>
+<script>
+    function AllSales() {
+
+
+        $(document).ready(function () {
+            $.ajax({
+                type: 'Get',
+                url: "http://localhost:51533/api/allsales",
+
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+
+                success: function (data) {
+                    $.each(data, function (index, val) {
+
+                        $(".tblallsales").append('<tr><td>' + val.EmployeeName + '</td><td>' + val.SalesAmount + '</td><td>' + val.ManagerName + '</td></tr>');
+                        //alert(fullname);
+                    });
+                    console.log(data);
+                },
+                fail: function (jqXHR, textStatus) {
+                    alert("Request failed: " + textStatus);
+                }
+            })
+
+        })
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "http://localhost:51533/api/manager",
+            type: "GET",
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+
+            success: function (data) {
+                $.each(data, function (index, val) {
+                    $('.drp_mng')
+                        .append($('<option value=' + val.EManager + '>' + val.ManagerName + '</option>')
+                        );
+
+                });
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "http://localhost:51533/api/empname",
+            type: "GET",
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+
+            success: function (data) {
+                $.each(data, function (index, val) {
+                    $('.drp_name')
+                        .append($('<option value=' + val.EmpID + '>' + val.Name + '</option>')
+                        );
+
+                });
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    });
+</script>
+
+
+
+
+<script>
+    $(".btn_submit").click(function () {
+        var employee = new Object();
+        employee.EFirstName = $('.drp_name').val();
+        employee.ELastName = $('.txt_LName').val();
+        employee.Edesignation = $('.drp_role').val();
+        employee.EManager = $('.drp_mng').val();
+        if (employee != null) {
+            $.ajax({
+                url: 'http://localhost:51533/api/newemp',
+                type: 'POST',
+                dataType: 'json',
+                data: employee,
+                success: function (d) {
+                    
+                    alert("Saved Successfully");
+                    
+                    //document.getElementById("postform").reset();
+                },
+                error: function () {
+                    alert("Error please try again");
+                }
+            });
+
+        }
+    });
+
+</script>
+
+
+<script>
+    $(".btn_Salessubmit").click(function () {
+        var sale = new Object();
+        sale.EmpID = $('.drp_name').val();
+        sale.SalesDate = $('.txt_Date').val();
+        sale.SalesAmount = $('.txt_Amount').val();
+        sale.Sales_Desc = $('.txt_Desc').val();
+        if (sale != null) {
+            $.ajax({
+                url: 'http://localhost:51533/api/newsales',
+                type: 'POST',
+                dataType: 'json',
+                data: sale,
+                success: function (d) {
+                    debugger
+                    alert("Saved Successfully");
+                    sale();
+                    AllSales();
+                    //document.getElementById("postform").reset();
+                },
+                error: function () {
+                    alert("Error please try again");
+                }
+            });
+
+        }
+    });
+
+</script>
+
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    /* Create two equal columns that floats next to each other */
+    .column {
+        float: left;
+        width: 50%;
+        padding: 10px;
+        height: 300px; /* Should be removed. Only for demonstration */
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .tblsales {
+        width: 400px;
+        height: 180px;
+    }
+
+    .tblallsales {
+       
+        height:200px;
+        
+    }
+
+    th {
+        width:33.3%;
+        height: 40px;
+        color: white;
+        text-align: center;
+    }
+
+    .form-control {
+        margin-left: 150px !important;
+    }
+    tr{
+        height:40px;
+    }
+    td{
+        width:33.3%;
+    }
+    label {
+        margin-left: 150px !important;
+    }
+    .btn-info{
+        margin-left:15px;
+        border-radius: 30px;
+    }
+</style>
+
+
+
+<style>
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey;
+        border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: grey;
+        border-radius: 10px;
+    }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b30000;
+        }
+</style>
+
+

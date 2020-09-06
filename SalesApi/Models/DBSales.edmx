@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DBSalesChartModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_employee">
+          <Key>
+            <PropertyRef Name="EmpID" />
+          </Key>
+          <Property Name="EmpID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EFirstName" Type="nvarchar" MaxLength="150" />
+          <Property Name="ELastName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Edesignation" Type="nvarchar" MaxLength="150" />
+          <Property Name="EManager" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_Sales">
+          <Key>
+            <PropertyRef Name="SID" />
+          </Key>
+          <Property Name="SID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpID" Type="int" />
+          <Property Name="SalesDate" Type="date" />
+          <Property Name="SalesAmount" Type="float" />
+          <Property Name="Sales_Desc" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_tbl_Sales_tbl_employee">
+          <End Role="tbl_employee" Type="Self.tbl_employee" Multiplicity="0..1" />
+          <End Role="tbl_Sales" Type="Self.tbl_Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_employee">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="tbl_Sales">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_allsales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_manager" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_sales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_salesemp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="DBSalesChartModelStoreContainer">
+          <EntitySet Name="tbl_employee" EntityType="Self.tbl_employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Sales" EntityType="Self.tbl_Sales" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tbl_Sales_tbl_employee" Association="Self.FK_tbl_Sales_tbl_employee">
+            <End Role="tbl_employee" EntitySet="tbl_employee" />
+            <End Role="tbl_Sales" EntitySet="tbl_Sales" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBSalesChartModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_employee">
+          <Key>
+            <PropertyRef Name="EmpID" />
+          </Key>
+          <Property Name="EmpID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EFirstName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ELastName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Edesignation" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="EManager" Type="Int32" />
+          <NavigationProperty Name="tbl_Sales" Relationship="Self.FK_tbl_Sales_tbl_employee" FromRole="tbl_employee" ToRole="tbl_Sales" />
+        </EntityType>
+        <EntityType Name="tbl_Sales">
+          <Key>
+            <PropertyRef Name="SID" />
+          </Key>
+          <Property Name="SID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpID" Type="Int32" />
+          <Property Name="SalesDate" Type="DateTime" Precision="0" />
+          <Property Name="SalesAmount" Type="Double" />
+          <Property Name="Sales_Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tbl_employee" Relationship="Self.FK_tbl_Sales_tbl_employee" FromRole="tbl_Sales" ToRole="tbl_employee" />
+        </EntityType>
+        <Association Name="FK_tbl_Sales_tbl_employee">
+          <End Role="tbl_employee" Type="Self.tbl_employee" Multiplicity="0..1" />
+          <End Role="tbl_Sales" Type="Self.tbl_Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_employee">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="tbl_Sales">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBSalesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_employee" EntityType="Self.tbl_employee" />
+          <EntitySet Name="tbl_Sales" EntityType="Self.tbl_Sales" />
+          <AssociationSet Name="FK_tbl_Sales_tbl_employee" Association="Self.FK_tbl_Sales_tbl_employee">
+            <End Role="tbl_employee" EntitySet="tbl_employee" />
+            <End Role="tbl_Sales" EntitySet="tbl_Sales" />
+          </AssociationSet>
+          <FunctionImport Name="sp_allsales" ReturnType="Collection(DBSalesChartModel.sp_allsales_Result)" />
+          <FunctionImport Name="sp_manager" ReturnType="Collection(DBSalesChartModel.sp_manager_Result)" />
+          <FunctionImport Name="sp_sales" ReturnType="Collection(DBSalesChartModel.sp_sales_Result)" />
+          <FunctionImport Name="sp_salesemp" ReturnType="Collection(DBSalesChartModel.sp_salesemp_Result)" />
+        </EntityContainer>
+        <ComplexType Name="sp_allsales_Result">
+          <Property Type="Int32" Name="EmpID" Nullable="false" />
+          <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="301" />
+          <Property Type="Double" Name="SalesAmount" Nullable="true" />
+          <Property Type="String" Name="ManagerName" Nullable="true" MaxLength="301" />
+        </ComplexType>
+        <ComplexType Name="sp_manager_Result">
+          <Property Type="Int32" Name="EManager" Nullable="true" />
+          <Property Type="String" Name="ManagerName" Nullable="true" MaxLength="301" />
+        </ComplexType>
+        <ComplexType Name="sp_sales_Result">
+          <Property Type="Int32" Name="EmpID" Nullable="false" />
+          <Property Type="String" Name="EmployeeName" Nullable="true" MaxLength="301" />
+          <Property Type="Double" Name="TotalSales" Nullable="true" />
+          <Property Type="String" Name="ManagerName" Nullable="true" MaxLength="301" />
+        </ComplexType>
+        <ComplexType Name="sp_salesemp_Result">
+          <Property Type="Int32" Name="EmpID" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="301" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBSalesChartModelStoreContainer" CdmEntityContainer="DBSalesEntities">
+          <EntitySetMapping Name="tbl_employee">
+            <EntityTypeMapping TypeName="DBSalesChartModel.tbl_employee">
+              <MappingFragment StoreEntitySet="tbl_employee">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="EFirstName" ColumnName="EFirstName" />
+                <ScalarProperty Name="ELastName" ColumnName="ELastName" />
+                <ScalarProperty Name="Edesignation" ColumnName="Edesignation" />
+                <ScalarProperty Name="EManager" ColumnName="EManager" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Sales">
+            <EntityTypeMapping TypeName="DBSalesChartModel.tbl_Sales">
+              <MappingFragment StoreEntitySet="tbl_Sales">
+                <ScalarProperty Name="SID" ColumnName="SID" />
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="SalesDate" ColumnName="SalesDate" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="Sales_Desc" ColumnName="Sales_Desc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_allsales" FunctionName="DBSalesChartModel.Store.sp_allsales">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBSalesChartModel.sp_allsales_Result">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="SalesAmount" ColumnName="SalesAmount" />
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_manager" FunctionName="DBSalesChartModel.Store.sp_manager">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBSalesChartModel.sp_manager_Result">
+                <ScalarProperty Name="EManager" ColumnName="EManager" />
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_sales" FunctionName="DBSalesChartModel.Store.sp_sales">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBSalesChartModel.sp_sales_Result">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="TotalSales" ColumnName="TotalSales" />
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_salesemp" FunctionName="DBSalesChartModel.Store.sp_salesemp">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBSalesChartModel.sp_salesemp_Result">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
